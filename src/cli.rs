@@ -1,3 +1,22 @@
+// CLI args should have something like the following subcommands
+// -> doot add (high|med|low) TITLE [DESCRIPTION]
+// e.g.
+// $ doot add high 'Very Important!' 'Cram for test'
+// $ doot add med 'Take out the trash'
+//
+// -> doot list [(-s|--sort-by) (priority|title)] [-r|--reverse]
+// e.g.
+// $ doot list
+// $ doot list --sort-by title
+// $ doot list -s priority -r
+//
+// -> doot remove TITLE
+// e.g.
+// $ doot remove 'Take out the trash'  # Done and done
+pub fn parse_args(args: Vec<String>) -> Option<Args> {
+    todo!("Implement arg parsing");
+}
+
 #[derive(Debug, PartialEq)]
 pub struct Args {
     // TODO: define me!
@@ -17,25 +36,10 @@ impl SortBy {
             _ => None,
         }
     }
-}
 
-// CLI args should have something like the following subcommands
-// $ doot add (high|med|low) TITLE [DESCRIPTION]
-// e.g.
-// $ doot add high 'Very Important!' 'Cram for test'
-// $ doot add med 'Take out the trash'
-//
-// $ doot list [(-s|--sort-by) (priority|title)] [-r|--reverse]
-// e.g.
-// $ doot list
-// $ doot list --sort-by title
-// $ doot list -s priority -r
-//
-// $ doot remove TITLE
-// e.g.
-// $ doot remove 'Take out the trash'  # Done and done
-pub fn parse_args(args: Vec<String>) -> Option<Args> {
-    todo!("Implement arg parsing");
+    fn default() -> SortBy {
+        Self::Priority
+    }
 }
 
 #[cfg(test)]
