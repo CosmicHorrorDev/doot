@@ -2,16 +2,14 @@ mod cli;
 mod error;
 mod todos;
 
-use std::path::PathBuf;
+use std::{env, path::PathBuf};
 
 use crate::todos::Todos;
 
 fn main() {
     env_logger::init();
 
-    let args: Vec<_> = std::env::args().collect();
-    log::info!("unparsed args:\n{args:?}");
-    let args = cli::parse_args(args).expect("Invalid cli args");
+    let args = cli::parse_args(env::args()).expect("Invalid cli args");
     log::info!("parsed args:\n{args:#?}");
 
     let todo_path = PathBuf::from("todos.json");

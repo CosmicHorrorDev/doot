@@ -1,3 +1,5 @@
+use std::env;
+
 // CLI args should have something like the following subcommands
 // -> doot add (high|med|low) TITLE [DESCRIPTION]
 // e.g.
@@ -13,7 +15,7 @@
 // -> doot remove TITLE
 // e.g.
 // $ doot remove 'Take out the trash'  # Done and done
-pub fn parse_args(args: Vec<String>) -> Option<Args> {
+pub fn parse_args(args: env::Args) -> Option<Args> {
     todo!("Implement arg parsing");
 }
 
