@@ -1,18 +1,10 @@
-use std::env;
-
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Parse the second arg as a string (First is the executable path)
-    let mut args = env::args();
-    let _ = args.next();
-    let arg: u32 = match args.next() {
-        Some(arg) => arg.parse()?,
-        None => {
-            return Err("Requires a number to be passed".into());
-        }
+fn main() {
+    let s = "123";
+    let num: u32 = match s.parse() {
+        Ok(num) => num,
+        Err(_) => panic!("Not a number!"),
     };
 
-    let msg = if arg % 2 == 0 { "Even!" } else { "Odd!" };
+    let msg = if num % 2 == 0 { "Even!" } else { "Odd!" };
     println!("{msg}");
-
-    Ok(())
 }

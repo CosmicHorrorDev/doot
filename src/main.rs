@@ -1,21 +1,14 @@
-mod cli;
-mod error;
-mod todos;
-
 use std::{env, path::PathBuf};
 
-use crate::todos::Todos;
+use anyhow::Result;
+use doot::run;
 
-fn main() {
+fn main() -> Result<()> {
     env_logger::init();
 
-    let args = cli::parse_args(env::args()).expect("Invalid cli args");
-    log::info!("parsed args:\n{args:#?}");
-
+    let args = env::args().collect();
     let todo_path = PathBuf::from("todos.json");
-    let mut todos = Todos::load_from(todo_path).expect("Failed to load todos");
+    run(args, todo_path)?;
 
-    todo!("Do something with the parsed `args` and `todos`");
-
-    todos.save().expect("Failed to save todos file");
+    Ok(())
 }

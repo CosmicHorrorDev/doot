@@ -1,4 +1,4 @@
-use std::env;
+use crate::todos::Priority;
 
 // CLI args should have something like the following subcommands
 // -> doot add (high|med|low) TITLE [DESCRIPTION]
@@ -15,13 +15,38 @@ use std::env;
 // -> doot remove TITLE
 // e.g.
 // $ doot remove 'Take out the trash'  # Done and done
-pub fn parse_args(args: env::Args) -> Option<Args> {
+pub fn parse_args(args: Vec<String>) -> Option<Args> {
     todo!("Implement arg parsing");
 }
 
 #[derive(Debug, PartialEq)]
 pub struct Args {
-    // TODO: define me!
+    command: Command,
+}
+
+#[derive(Debug, PartialEq)]
+pub enum Command {
+    Add(AddArgs),
+    List(ListArgs),
+    Remove(RemoveArgs),
+}
+
+#[derive(Debug, PartialEq)]
+pub struct AddArgs {
+    priority: Priority,
+    title: String,
+    description: Option<String>,
+}
+
+#[derive(Debug, PartialEq)]
+pub struct ListArgs {
+    sort_by: SortBy,
+    reverse: bool,
+}
+
+#[derive(Debug, PartialEq)]
+pub struct RemoveArgs {
+    title: String,
 }
 
 #[derive(Debug, PartialEq)]
@@ -74,7 +99,16 @@ mod tests {
         ];
         let parsed = parse_args(args);
 
-        assert_eq!(parsed, Some(todo!("What type does adding parse to?")));
+        assert_eq!(
+            parsed,
+            Some(Args {
+                command: Command::Add(AddArgs {
+                    priority: Priority::High,
+                    title: "some title".into(),
+                    description: None
+                })
+            })
+        );
     }
 
     #[test]
@@ -82,7 +116,15 @@ mod tests {
         let args = vec!["doot".into(), "list".into()];
         let parsed = parse_args(args);
 
-        assert_eq!(parsed, Some(todo!("What type does listing parse to?")));
+        assert_eq!(
+            parsed,
+            Some(Args {
+                command: Command::List(ListArgs {
+                    sort_by: SortBy::default(),
+                    reverse: false
+                })
+            })
+        );
     }
 
     #[test]
@@ -90,6 +132,13 @@ mod tests {
         let args = vec!["doot".into(), "remove".into(), "some title".into()];
         let parsed = parse_args(args);
 
-        assert_eq!(parsed, Some(todo!("What type does removing parse to?")));
+        assert_eq!(
+            parsed,
+            Some(Args {
+                command: Command::Remove(RemoveArgs {
+                    title: "some title".into()
+                })
+            })
+        );
     }
 }

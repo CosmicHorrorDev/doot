@@ -13,10 +13,6 @@ enum MyEnum {
 }
 
 fn main() {
-    let mut flip_flop = false;
-    flip_flop = !flip_flop;
-    println!("`flip_flip`: {flip_flop}");
-
     let my_struct = MyStruct {
         field1: true,
         field2: vec![1, 2, 3],

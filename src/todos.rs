@@ -1,15 +1,15 @@
+use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
-use std::path::PathBuf;
+use std::{collections::HashMap, fs, path::PathBuf};
 
 use crate::cli::SortBy;
-use crate::error::Result;
 
-#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Debug, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Priority {
-    High,
-    Med,
     Low,
+    Med,
+    High,
 }
 
 impl Priority {
@@ -32,27 +32,67 @@ pub struct Todo {
 
 pub struct Todos {
     path: PathBuf,
-    todos: Vec<Todo>,
+    // Maps the title -> todo
+    todos: HashMap<String, Todo>,
 }
 
 impl Todos {
     pub fn load_from(path: PathBuf) -> Result<Todos> {
-        todo!("Implement loading todos");
+        if path.is_file() {
+            // Try loading the file
+            let contents = fs::read_to_string(&path)?;
+            let todos = serde_json::from_str(&contents)?;
+            Ok(Todos { path, todos })
+        } else {
+            // No existing saved file. Make a new one
+            Ok(Todos {
+                path,
+                todos: HashMap::new(),
+            })
+        }
     }
 
     pub fn save(&self) -> Result<()> {
-        todo!("Implement saving todos");
+        let json_str = serde_json::to_string(&self.todos)?;
+        fs::write(&self.path, &json_str)?;
+
+        Ok(())
     }
 
-    pub fn add(&mut self, priority: Priority, title: String, desc: Option<String>) {
-        todo!("Implement adding a todo");
+    pub fn add(&mut self, todo: Todo) -> anyhow::Result<()> {
+        let title = &todo.title;
+        if self.todos.contains_key(title) {
+            anyhow::bail!("Title conflict with existing entry. Title: {title}");
+        }
+
+        let _ = self.todos.insert(title.to_owned(), todo);
+
+        Ok(())
     }
 
-    pub fn list(&self, sort_by: Option<SortBy>, reverse: bool) -> String {
-        todo!("Implement listing todos");
+    pub fn list(&self, maybe_sort_by: Option<SortBy>, reverse: bool) -> String {
+        let mut values: Vec<_> = self.todos.values().collect();
+
+        // Sort the entries before displaying
+        if let Some(sort_by) = maybe_sort_by {
+            match sort_by {
+                SortBy::Title => values.sort_by_key(|todo| &todo.title),
+                SortBy::Priority => values.sort_by_key(|todo| &todo.priority),
+            }
+        }
+
+        if reverse {
+            values.reverse();
+        }
+
+        todo!();
     }
 
     pub fn remove(&mut self, title: String) -> Result<()> {
-        todo!("Implement removing a todo");
+        if self.todos.remove(&title).is_none() {
+            anyhow::bail!("Failed removing entry. Couldn't find title: {title}");
+        }
+
+        Ok(())
     }
 }
