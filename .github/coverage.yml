@@ -1,0 +1,32 @@
+on: [push]
+
+name: codecov
+
+jobs:
+  check:
+    name: Upload coverage to codecov.io
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Nightly is required for `tarpaulin` to get coverage from doc tests
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly-2021-11-01
+          override: true
+
+      - name: Run cargo-tarpaulin
+        uses: actions-rs/tarpaulin@v0.1
+        with:
+          version: '0.19.1'
+
+      - name: Upload to codecov.io
+        uses: codecov/codecov-action@v1.0.2
+
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v1
+        with:
+          name: code-coverage-report
+          path: cobertura.xml
