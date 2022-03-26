@@ -69,76 +69,76 @@ impl SortBy {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
 
-    #[test]
-    fn empty_args_fails() {
-        let args = vec!["doot".into()];
-        let parsed = parse_args(args);
+//     #[test]
+//     fn empty_args_fails() {
+//         let args = vec!["doot".into()];
+//         let parsed = parse_args(args);
 
-        assert_eq!(parsed, None);
-    }
+//         assert_eq!(parsed, None);
+//     }
 
-    #[test]
-    fn missing_sort_by_value_fails() {
-        let args = vec!["doot".into(), "list".into(), "--sort-by".into()];
-        let parsed = parse_args(args);
+//     #[test]
+//     fn missing_sort_by_value_fails() {
+//         let args = vec!["doot".into(), "list".into(), "--sort-by".into()];
+//         let parsed = parse_args(args);
 
-        assert_eq!(parsed, None);
-    }
+//         assert_eq!(parsed, None);
+//     }
 
-    #[test]
-    fn add_works() {
-        let args = vec![
-            "doot".into(),
-            "add".into(),
-            "high".into(),
-            "some title".into(),
-        ];
-        let parsed = parse_args(args);
+//     #[test]
+//     fn add_works() {
+//         let args = vec![
+//             "doot".into(),
+//             "add".into(),
+//             "high".into(),
+//             "some title".into(),
+//         ];
+//         let parsed = parse_args(args);
 
-        assert_eq!(
-            parsed,
-            Some(Args {
-                command: Command::Add(AddArgs {
-                    priority: Priority::High,
-                    title: "some title".into(),
-                    description: None
-                })
-            })
-        );
-    }
+//         assert_eq!(
+//             parsed,
+//             Some(Args {
+//                 command: Command::Add(AddArgs {
+//                     priority: Priority::High,
+//                     title: "some title".into(),
+//                     description: None
+//                 })
+//             })
+//         );
+//     }
 
-    #[test]
-    fn list_works() {
-        let args = vec!["doot".into(), "list".into()];
-        let parsed = parse_args(args);
+//     #[test]
+//     fn list_works() {
+//         let args = vec!["doot".into(), "list".into()];
+//         let parsed = parse_args(args);
 
-        assert_eq!(
-            parsed,
-            Some(Args {
-                command: Command::List(ListArgs {
-                    sort_by: SortBy::default(),
-                    reverse: false
-                })
-            })
-        );
-    }
+//         assert_eq!(
+//             parsed,
+//             Some(Args {
+//                 command: Command::List(ListArgs {
+//                     sort_by: SortBy::default(),
+//                     reverse: false
+//                 })
+//             })
+//         );
+//     }
 
-    #[test]
-    fn remove_works() {
-        let args = vec!["doot".into(), "remove".into(), "some title".into()];
-        let parsed = parse_args(args);
+//     #[test]
+//     fn remove_works() {
+//         let args = vec!["doot".into(), "remove".into(), "some title".into()];
+//         let parsed = parse_args(args);
 
-        assert_eq!(
-            parsed,
-            Some(Args {
-                command: Command::Remove(RemoveArgs {
-                    title: "some title".into()
-                })
-            })
-        );
-    }
-}
+//         assert_eq!(
+//             parsed,
+//             Some(Args {
+//                 command: Command::Remove(RemoveArgs {
+//                     title: "some title".into()
+//                 })
+//             })
+//         );
+//     }
+// }
