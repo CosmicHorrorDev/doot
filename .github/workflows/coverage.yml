@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v2
 
       # Nightly is required for `tarpaulin` to get coverage from doc tests
-      - name: Install stable toolchain
+      - name: Install nightly toolchain
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly-2021-11-01
@@ -21,9 +21,12 @@ jobs:
         uses: actions-rs/tarpaulin@v0.1
         with:
           version: '0.19.1'
+          args: '--tests'
 
       - name: Upload to codecov.io
         uses: codecov/codecov-action@v1.0.2
+        with:
+          token: ${{secrets.CODECOV_IO_TOKEN}}
 
       - name: Archive code coverage results
         uses: actions/upload-artifact@v1
